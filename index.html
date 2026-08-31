@@ -1,11 +1,86 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="refresh" content="0; url=upi://pay?pa=8830892330@kotakbank&pn=Harshit&cu=INR">
-<script>window.location.href = "upi://pay?pa=8830892330@kotakbank&pn=Harshit&cu=INR";</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  a.pay-btn, button.pay-btn {
+    display: block;
+    margin-top: 20px;
+    padding: 18px 40px;
+    background: #22c55e;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 12px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    width: 260px;
+  }
+  .upi-id {
+    margin-top: 30px;
+    padding: 14px;
+    background: #222;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  .copied {
+    color: #22c55e;
+    font-size: 14px;
+    margin-top: 8px;
+    height: 18px;
+  }
+</style>
 </head>
 <body>
-<p>Redirecting to UPI app... <a href="upi://pay?pa=8830892330@kotakbank&pn=Harshit&cu=INR">Tap here if not redirected</a></p>
+<h2>Tip Harshit 🔧</h2>
+<p id="subtitle">Tap below to pay via UPI</p>
+
+<button class="pay-btn" id="payBtn">Pay via UPI</button>
+
+<div class="upi-id" onclick="copyId()">
+  Or copy UPI ID:<br>
+  <b>8830892330@kotakbank</b>
+</div>
+<div class="copied" id="copiedMsg"></div>
+
+<script>
+  const upiParams = "pa=8830892330@kotakbank&pn=Harshit&cu=INR";
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+  document.getElementById("payBtn").addEventListener("click", function() {
+    if (isAndroid) {
+      // Android: intent:// works reliably from Chrome, opens app chooser
+      window.location.href = "intent://pay?" + upiParams + "#Intent;scheme=upi;end";
+    } else if (isIOS) {
+      // iOS: try direct upi:// scheme (works in Safari with user tap)
+      window.location.href = "upi://pay?" + upiParams;
+    } else {
+      // Desktop / unknown: just copy UPI ID instead
+      copyId();
+    }
+  });
+
+  function copyId() {
+    navigator.clipboard.writeText("8830892330@kotakbank").then(function() {
+      document.getElementById("copiedMsg").innerText = "Copied! Paste in your UPI app.";
+    });
+  }
+</script>
+
 </body>
 </html>
